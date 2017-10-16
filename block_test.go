@@ -32,7 +32,7 @@ func TestGenesisBlock(t *testing.T) {
 
 func TestNew(t *testing.T) {
 	genesis := GenesisBlock()
-	block := New("New Block", genesis.Hash)
+	block := NewBlock("New Block", genesis.Hash)
 
 	if block.Hash == nil || string(block.PrevBlockHash) != string(genesis.Hash) {
 		t.Errorf("New Block PrevHash was incorrect, got: %x, want: %x.", block.PrevBlockHash, genesis.Hash)

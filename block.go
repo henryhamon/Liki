@@ -15,7 +15,7 @@ type Block struct {
 	Hash          []byte
 }
 
-func New(data string, prevBlock []byte) *Block {
+func NewBlock(data string, prevBlock []byte) *Block {
 	block := &Block{time.Now().Unix(), []byte(data), prevBlock, []byte{}}
 	block.SetHash()
 
@@ -32,5 +32,5 @@ func (b *Block) SetHash() {
 }
 
 func GenesisBlock() *Block {
-	return New("Genesis Block", []byte{})
+	return NewBlock("Genesis Block", []byte{})
 }
