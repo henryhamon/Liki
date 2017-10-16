@@ -8,3 +8,9 @@ type Blockchain struct {
 func NewBlockchain() *Blockchain {
 	return &Blockchain{[]*Block{GenesisBlock()}}
 }
+
+func (bc *Blockchain) AddBlock(data string) {
+	prevBlock := bc.blocks[len(bc.blocks)-1]
+	newBlock := New(data, prevBlock.Hash)
+	bc.blocks = append(bc.blocks, newBlock)
+}
