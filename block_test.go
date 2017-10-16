@@ -1,0 +1,26 @@
+package main
+
+import (
+	"bytes"
+	"crypto/sha256"
+	"strconv"
+	"testing"
+)
+
+func TestSetHash(t *testing.T) {
+	block := &Block{1257894000, []byte("First Hash"), []byte(""), []byte{}}
+
+	block.SetHash()
+
+	timestamp := []byte(strconv.FormatInt(1257894000, 10))
+	headers := bytes.Join([][]byte{[]byte(""), []byte("First Hash"), timestamp}, []byte{})
+	shahash := sha256.Sum256(headers)
+	hash := shahash[:]
+
+	if string(block.Hash) != string(hash) {
+		t.Errorf("Hash was incorrect, got: %x, want: %x.", block.Hash, hash)
+	}
+}
+
+func TestGenesisBlock(t *testing.T) {
+}
