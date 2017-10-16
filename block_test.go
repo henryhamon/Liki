@@ -23,4 +23,9 @@ func TestSetHash(t *testing.T) {
 }
 
 func TestGenesisBlock(t *testing.T) {
+
+	block := GenesisBlock()
+	if string(block.PrevBlockHash) != string([]byte{}) {
+		t.Errorf("Genesis Block was incorrect, got: %x, want: %x.", block.PrevBlockHash, []byte{})
+	}
 }

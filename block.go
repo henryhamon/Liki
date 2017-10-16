@@ -31,5 +31,6 @@ func (b *Block) SetHash() {
 	b.Hash = hash[:]
 }
 
-func GenesisBlock() {
+func GenesisBlock() *Block {
+	return New("Genesis Block", []byte{})
 }
