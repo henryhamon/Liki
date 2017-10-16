@@ -8,7 +8,7 @@ import (
 )
 
 func TestSetHash(t *testing.T) {
-	block := &Block{1257894000, []byte("First Hash"), []byte(""), []byte{}}
+	block := &Block{1257894000, []byte("First Hash"), []byte(""), []byte{}, 0}
 
 	block.SetHash()
 
