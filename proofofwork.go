@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"math/big"
 )
 
@@ -19,4 +20,19 @@ func NewProofOfWork(b *Block) *ProofOfWork {
 	pow := &ProofOfWork{b, target}
 
 	return pow
+}
+
+func (pow *ProofOfWork) prepareData(nonce int) []byte {
+	data := bytes.Join(
+		[][]byte{
+			pow.block.PrevBlockHash,
+			pow.block.Data,
+			IntToHex(pow.block.TimeStamp),
+			IntToHex(int64(256 - 24)),
+			IntToHex(int64(2)),
+		},
+		[]byte{},
+	)
+
+	return data
 }
