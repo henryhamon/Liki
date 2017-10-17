@@ -24,13 +24,13 @@ func TestPrepareData(t *testing.T) {
 			pow.block.PrevBlockHash,
 			pow.block.Data,
 			IntToHex(pow.block.TimeStamp),
-			IntToHex(int64(256 - 24)),
-			IntToHex(int64(2)),
+			IntToHex(int64(24)),
+			IntToHex(int64(1)),
 		},
 		[]byte{},
 	)
 
-	powdata := pow.prepareData(2)
+	powdata := pow.prepareData(1)
 	if string(powdata) != string(data) {
 		t.Errorf("PoW Data was incorrect, got: %x, want: %x.", powdata, data)
 	}
