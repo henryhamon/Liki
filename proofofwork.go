@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"fmt"
-	"math"
 	"math/big"
 )
 
@@ -46,8 +45,10 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 	var hash [32]byte
 	nonce := 0
 
+	maxInt := 2 ^ 63 - 1
+
 	fmt.Printf("Mining the block containing \"%s\"\n", pow.block.Data)
-	for nonce < math.MaxInt32 {
+	for nonce < maxInt {
 		data := pow.prepareData(nonce)
 
 		hash = sha256.Sum256(data)
