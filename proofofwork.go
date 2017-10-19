@@ -3,65 +3,67 @@ package main
 import (
 	"bytes"
 	"crypto/sha256"
+	"encoding/binary"
 	"fmt"
+	"math"
 	"math/big"
 )
 
-const targetBits = 24
+const targetBits = 22
 
 // ProofOfWork represents a proof-of-work
 type ProofOfWork struct {
 	block  *Block
-	target *big.Int
+	target int
 }
 
 func NewProofOfWork(b *Block) *ProofOfWork {
-	target := big.NewInt(1)
-	target.Lsh(target, uint(256-targetBits))
-
-	pow := &ProofOfWork{b, target}
+	pow := &ProofOfWork{b, targetBits}
 
 	return pow
 }
 
-func (pow *ProofOfWork) prepareData(nonce int) []byte {
-	data := bytes.Join(
-		[][]byte{
-			pow.block.PrevBlockHash,
-			pow.block.Data,
-			IntToHex(pow.block.TimeStamp),
-			IntToHex(int64(targetBits)),
-			IntToHex(int64(nonce)),
-		},
-		[]byte{},
-	)
-
-	return data
+func (pow ProofOfWork) ZeroCount() int {
+	digest := sha256.Sum256(pow.PrepareHash())
+	digestHex := new(big.Int).SetBytes(digest[:])
+	return ((sha256.Size * 8) - digestHex.BitLen())
 }
 
-// Run performs a proof-of-work
-func (pow *ProofOfWork) Run() (int, []byte) {
-	var hashInt big.Int
-	var hash [32]byte
-	nonce := 0
+func (pow ProofOfWork) PrepareHash() []byte {
+	var buf bytes.Buffer
 
-	maxInt := 2 ^ 63 - 1
+	buf.Write(pow.block.PrevBlockHash)
+	buf.Write(pow.block.Data)
 
-	fmt.Printf("Mining the block containing \"%s\"\n", pow.block.Data)
-	for nonce < maxInt {
-		data := pow.prepareData(nonce)
+	binary.Write(&buf, binary.BigEndian, pow.block.TimeStamp)
+	binary.Write(&buf, binary.BigEndian, pow.block.Nonce)
 
-		hash = sha256.Sum256(data)
-		fmt.Printf("\r%x", hash)
-		hashInt.SetBytes(hash[:])
+	return buf.Bytes()
+}
 
-		if hashInt.Cmp(pow.target) == -1 {
-			break
-		} else {
-			nonce++
-		}
+func (pow ProofOfWork) Check() bool {
+	if pow.ZeroCount() >= pow.target {
+		return true
 	}
-	fmt.Print("\n\n")
+	return false
+}
 
-	return nonce, hash[:]
+// FindProof performs a proof-of-work
+func (pow *ProofOfWork) FindProof() {
+	var hash [32]byte
+	fmt.Printf("\rMining the block containing \"%s\"\n", pow.block.Data)
+	for {
+		hash = sha256.Sum256(pow.PrepareHash())
+		if pow.Check() {
+			fmt.Printf("\r%x (yay!)", hash)
+
+			return
+		}
+		if pow.block.Nonce >= math.MaxInt64 {
+			fmt.Println("\n:(")
+			return
+		}
+
+		pow.block.Nonce++
+	}
 }
