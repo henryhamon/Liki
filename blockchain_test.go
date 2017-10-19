@@ -12,6 +12,7 @@ func TestNewBlockchain(t *testing.T) {
 	}
 }
 
+/*
 func TestAddBlock(t *testing.T) {
 	bc := NewBlockchain()
 
@@ -28,3 +29,4 @@ func TestAddBlock(t *testing.T) {
 		t.Errorf("Blockchain was incorrect, got: %x, want: %x.", bc.blocks[len(bc.blocks)-1].PrevBlockHash, genesis.Hash)
 	}
 }
+//*/
