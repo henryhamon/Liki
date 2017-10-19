@@ -38,3 +38,5 @@ func TestNew(t *testing.T) {
 		t.Errorf("New Block PrevHash was incorrect, got: %x, want: %x.", block.PrevBlockHash, genesis.Hash)
 	}
 }
+
+//*/

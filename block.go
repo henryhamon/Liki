@@ -13,7 +13,7 @@ type Block struct {
 	Data          []byte
 	PrevBlockHash []byte
 	Hash          []byte
-	Nonce         int
+	Nonce         int64
 }
 
 func NewBlock(data string, prevBlock []byte) *Block {
@@ -21,10 +21,10 @@ func NewBlock(data string, prevBlock []byte) *Block {
 
 	// block.SetHash()
 	pow := NewProofOfWork(block)
-	nonce, hash := pow.Run()
 
+	pow.FindProof()
+	hash := sha256.Sum256(pow.PrepareHash())
 	block.Hash = hash[:]
-	block.Nonce = nonce
 
 	return block
 }
