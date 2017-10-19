@@ -16,3 +16,13 @@ func IntToHex(num int64) []byte {
 
 	return buff.Bytes()
 }
+
+func ArrayOfBytes(i int, b byte) (p []byte) {
+
+	for i != 0 {
+
+		p = append(p, b)
+		i--
+	}
+	return
+}
