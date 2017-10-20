@@ -41,10 +41,7 @@ func (b *Block) SetHash() {
 }
 
 func GenesisBlock() *Block {
-	block := &Block{time.Now().Unix(), []byte("Genesis Block"), []byte(""), []byte{}, 0}
-
-	block.SetHash()
-	return block
+	return NewBlock("Genesis", []byte{})
 }
 
 func (b *Block) Serialize() []byte {
