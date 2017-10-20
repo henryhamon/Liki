@@ -3,7 +3,9 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
+	"fmt"
 	"log"
+	"reflect"
 )
 
 // IntToHex converts an int64 to a byte array
@@ -25,4 +27,12 @@ func ArrayOfBytes(i int, b byte) (p []byte) {
 		i--
 	}
 	return
+}
+
+func SHAString(data []byte) string {
+	return fmt.Sprintf("%x", data)
+}
+
+func IsNil(v interface{}) bool {
+	return reflect.ValueOf(v).IsNil()
 }
